@@ -1,0 +1,43 @@
+#new-game-container {
+  text-align: center;
+}
+
+#main-container {
+  text-align: center;
+}
+
+#player-setup-grid-container {
+  display: grid;
+  grid-template-columns: auto auto;  
+}
+
+.span-col-2 {
+  grid-column: 1 / span 2;
+  align-items: center;
+  justify-content: center;
+}
+
+#gameboard-grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background-color: burlywood;
+  grid-gap: 5px;
+  padding: 5px;
+  height: 310px;
+  width: 310px;
+  margin: auto;
+}
+
+.gameboard-grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: lightgray;
+  font-size: 85px;
+  height: 100px;
+  width: 100px;
+}
+
+#game-status-container {
+  margin: auto;
+}
