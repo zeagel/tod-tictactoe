@@ -1,14 +1,63 @@
+body {
+ font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.common-button {
+  height: 35px;
+  width: 110px;
+  font-family: inherit;
+}
+
 #new-game-container {
   text-align: center;
+  margin-bottom: 10px;
 }
 
 #main-container {
   text-align: center;
+  width: 400px;
+  margin: auto;
 }
 
 #player-setup-grid-container {
   display: grid;
-  grid-template-columns: auto auto;  
+  grid-template-columns: auto auto;
+  grid-gap: 5px;
+}
+
+.player-setup-grid-item {
+  background-color: lightskyblue;
+  border: 1px solid steelblue;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.item-header {
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: underline;
+  margin-bottom: 8px;
+}
+
+.item-sub-header {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.radio-container-stacked {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.radio-container-stacked > div {
+  text-align: left;
+}
+
+.player-setup-input {
+  margin-bottom: 10px;
+  height: 25px;
+  text-align: center;
 }
 
 .span-col-2 {
@@ -17,15 +66,20 @@
   justify-content: center;
 }
 
+#start-button-container {
+  margin-top: 10px;
+}
+
 #gameboard-grid-container {
   display: grid;
   grid-template-columns: auto auto auto;
-  background-color: burlywood;
+  background-color: steelblue;
   grid-gap: 5px;
   padding: 5px;
   height: 310px;
   width: 310px;
   margin: auto;
+  border-radius: 10px;
 }
 
 .gameboard-grid-item {
@@ -39,5 +93,75 @@
 }
 
 #game-status-container {
-  margin: auto;
+  display: grid;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+#game-details {
+  background-color: lightblue;
+  border: 1px solid steelblue;
+  border-radius: 10px;
+  width: 200px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#round-info {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+#wins-info {
+  margin-top: 5px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.wins-data-container {
+  display: grid;
+  grid-template-columns: 70% 30%;
+}
+
+.wins-data-item-left {
+  text-align: right;
+  padding-right: 5px;  
+}
+
+.wins-data-item-right {
+  text-align: left;
+  padding-left: 5px;  
+}
+
+#player-setup-message-container {
+  display: grid;
+  grid-template-columns: auto
+}
+
+.error-message {
+  color: red;
+  border: 1px solid red;
+  border-radius: 5px;
+  background-color: lightpink;
+  width: 300px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  padding: 10px;
+}
+
+#game-messages {
+  margin-top: 20px;
+}
+
+#game-messages > div {
+  color: lightseagreen;
+  font-size: 25px; 
+}
+
+#next-round {
+  margin-top: 15px;
 }

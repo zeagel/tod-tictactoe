@@ -214,46 +214,106 @@ const displayControl = (() => {
       $('#main-container').append('<div id="player-setup-grid-container"></div>');
 
       let p1 = '<div class="player-setup-grid-item">';
-      p1 += '<p>Player #1</p>';
-      p1 += '<label for="player1">Name:</label>';
-      p1 += '<input id="player1" name="player1" />';
-      p1 += '<p>Select your game sign:</p>';
-      p1 += '<label for="X">Cross (X)</label>';
-      p1 += '<input type="radio" id="X" name="sign-sel-p1" value="X" onchange="displayControl.toggleGameSigns({p: 1, s: \'X\'})" checked />';
-      p1 += '<label for="O">Zero (0)</label>';
-      p1 += '<input type="radio" id="0" name="sign-sel-p1" value="0" onchange="displayControl.toggleGameSigns({p: 1, s: \'0\'})" />';
+      p1 += '<div class="item-header">Player #1</div>';
+
+      p1 += '<div class="radio-container-stacked">';
+      p1 += '<div>';
+      p1 += '<input type="radio" id="player1-type-human" name="player1-type" value="human" onchange="displayControl.handlePlayerTypeOnChange(\'p1\')" checked />';
+      p1 += '<label for="player1-type-human">Human</label>';
+      p1 += '<br />';
+      p1 += '<input type="radio" id="player1-type-cpu" name="player1-type" value="computer" onchange="displayControl.handlePlayerTypeOnChange(\'p1\')" />';
+      p1 += '<label for="player1-type-cpu">Computer</label>';
+      p1 += '</div>';
       p1 += '</div>';
 
+      p1 += '<label for="player1" class="item-sub-header">Name:</label>';
+      p1 += '<input id="player1" class="player-setup-input" name="player1" maxlength="18" />';
+
+      p1 += '<div>';
+      p1 += '<div class="item-sub-header">Game sign:</div>';
+      p1 += '<div class="radio-container-stacked">';
+      p1 += '<div>';
+      p1 += '<input type="radio" id="X" name="sign-sel-p1" value="X" onchange="displayControl.toggleGameSigns({p: 1, s: \'X\'})" checked />';
+      p1 += '<label for="X">Cross ( X )</label>';
+      p1 += '<br />';
+      p1 += '<input type="radio" id="0" name="sign-sel-p1" value="0" onchange="displayControl.toggleGameSigns({p: 1, s: \'0\'})" />';
+      p1 += '<label for="O">Zero ( 0 )</label>';
+      p1 += '</div>';
+      p1 += '</div>';
+
+      p1 += '</div>'; // closes '<div class="player-setup-grid-item">'
+
       let p2 = '<div class="player-setup-grid-item">';
-      p2 += '<p>Player #2</p>';
-      p2 += '<label for="player2">Name:</label>';
-      p2 += '<input id="player2" name="player2" />';
-      p2 += '<p>Select your game sign:</p>';
-      p2 += '<label for="X">Cross (X)</label>';
-      p2 += '<input type="radio" id="X" name="sign-sel-p2" value="X" onchange="displayControl.toggleGameSigns({p: 2, s: \'X\'})" />';
-      p2 += '<label for="O">Zero (0)</label>';
-      p2 += '<input type="radio" id="0" name="sign-sel-p2" value="0" onchange="displayControl.toggleGameSigns({p: 2, s: \'0\'})" checked />';
+      p2 += '<div class="item-header">Player #2</div>';
+
+      p2 += '<div class="radio-container-stacked">';
+      p2 += '<div>';
+      p2 += '<input type="radio" id="player2-type-human" name="player2-type" value="human" onchange="displayControl.handlePlayerTypeOnChange(\'p2\')" checked />';
+      p2 += '<label for="player2-type-human">Human</label>';
+      p2 += '<br />'
+      p2 += '<input type="radio" id="player1-type-cpu" name="player2-type" value="computer" onchange="displayControl.handlePlayerTypeOnChange(\'p2\')" />';
+      p2 += '<label for="player2-type-cpu">Computer</label>';
+      p2 += '</div>';
       p2 += '</div>';
 
-      let roundSelAndSubmit = '<div class="player-setup-grid-item span-col-2">';
-      roundSelAndSubmit += '<div>';
-      roundSelAndSubmit += '<p>Select how many rounds are played:</p>';
-      roundSelAndSubmit += '<label for="three-rounds">3 rounds</label>';
-      roundSelAndSubmit += '<input type="radio" id="three-rounds" name="round-selection" value="3" checked />';
-      roundSelAndSubmit += '<label for="five-rounds">5 rounds</label>';
-      roundSelAndSubmit += '<input type="radio" id="five-rounds" name="round-selection" value=""5 />';
-      roundSelAndSubmit += '<label for="seven-rounds">7 rounds</label>';
-      roundSelAndSubmit += '<input type="radio" id="seven-rounds" name="round-selection" value="7" />';
-      roundSelAndSubmit += '</div>';
-      roundSelAndSubmit += '<div>';
-      roundSelAndSubmit += '<button id="start" onclick="displayControl.handleStartGameOnClick()">Start game</button>';
-      roundSelAndSubmit += '</div>';
-      roundSelAndSubmit += '</div>';
+      p2 += '<label for="player2" class="item-sub-header">Name:</label>';
+      p2 += '<input id="player2" class="player-setup-input" name="player2" maxlength="18" />';
 
-      $('#player-setup-grid-container').append(p1, p2, roundSelAndSubmit);
+      p2 += '<div>';
+      p2 += '<div class="item-sub-header">Game sign:</div>';
+      p2 += '<div class="radio-container-stacked">';
+      p2 += '<div>';
+      p2 += '<input type="radio" id="X" name="sign-sel-p2" value="X" onchange="displayControl.toggleGameSigns({p: 2, s: \'X\'})" />';
+      p2 += '<label for="X">Cross ( X )</label>';
+      p2 += '<br />'
+      p2 += '<input type="radio" id="0" name="sign-sel-p2" value="0" onchange="displayControl.toggleGameSigns({p: 2, s: \'0\'})" checked />';
+      p2 += '<label for="O">Zero ( 0 )</label>';
+      p2 += '</div>';
+      p2 += '</div>';
+
+      p2 += '</div>'; // closes '<div class="player-setup-grid-item">'
+
+      let roundSelAndSubmit = '<div class="player-setup-grid-item span-col-2">';
+      
+      roundSelAndSubmit += '<div class="item-sub-header">How many rounds are played?</div>';
+      roundSelAndSubmit += '<div id="round-radio-container">';
+      roundSelAndSubmit += '<div>'
+      roundSelAndSubmit += '<input type="radio" id="three-rounds" name="round-selection" value="3" checked />';
+      roundSelAndSubmit += '<label for="three-rounds">3 rounds</label>';
+      roundSelAndSubmit += '</div><div>'
+      roundSelAndSubmit += '<input type="radio" id="five-rounds" name="round-selection" value=""5 />';
+      roundSelAndSubmit += '<label for="five-rounds">5 rounds</label>';
+      roundSelAndSubmit += '</div><div>'
+      roundSelAndSubmit += '<input type="radio" id="seven-rounds" name="round-selection" value="7" />';
+      roundSelAndSubmit += '<label for="seven-rounds">7 rounds</label>';
+      roundSelAndSubmit += '</div></div>';
+      
+      roundSelAndSubmit += '<div id="start-button-container">';
+      roundSelAndSubmit += '<button id="start" class="common-button" onclick="displayControl.handleStartGameOnClick()">START GAME</button>';
+      roundSelAndSubmit += '</div>';
+      
+      roundSelAndSubmit += '</div>'; // closes '<div class="player-setup-grid-item span-col-2">'
+
+      const messageContainer = '<div id="player-setup-message-container" class="span-col-2"></div>';
+
+      $('#player-setup-grid-container').append(p1, p2, roundSelAndSubmit, messageContainer);
     });
   };
 
+  // Clear possible earlier set interval timeouts.
+  const clearAllEarlierIntervalTimeouts = () => {
+    const highestId = window.setTimeout(() => {
+      for (let i = highestId; i >= 0; i--) {
+        window.clearInterval(i);
+      }
+    }, 0);
+  };
+
+  const handlePlayerTypeOnChange = (player) => {
+    console.log(`Player '${player}' type onChange event triggered!`);
+
+  };
+  
   const toggleGameSigns = (selection) => {
     $(document).ready(function() {
       if (selection.p === 1 && selection.s === 'X') {
@@ -270,22 +330,40 @@ const displayControl = (() => {
 
   const handleStartGameOnClick = () => {
     $(document).ready(function() {
+
+      // Clear possible earlier message.
+      $('#player-setup-message-container').empty();
+
       const p1Name = $('input[id="player1"]').val();
       const p1Sign = $('input[name="sign-sel-p1"]:checked').val();
+      const p1Type = $('input[name="player1-type"]:checked').val();
       const p2Name = $('input[id="player2"]').val();
       const p2Sign = $('input[name="sign-sel-p2"]:checked').val();
+      const p2Type = $('input[name="player2-type"]:checked').val();
       const rounds = $('input[name="round-selection"]:checked').val();
 
-      GameFlow.setPlayers({ name: p1Name, sign: p1Sign }, { name: p2Name, sign: p2Sign });
-      GameFlow.setGameBoard();
-      GameFlow.setRounds(rounds);
-      GameFlow.setCurrentPlayer();
+      if (p1Name !== '' && p2Name !== '') {
+        GameFlow.setPlayers({ name: p1Name, sign: p1Sign }, { name: p2Name, sign: p2Sign });
+        GameFlow.setGameBoard();
+        GameFlow.setRounds(rounds);
+        GameFlow.setCurrentPlayer();
+  
+        addGameBoard();
+        addGameStatusContainer();
+        updateRoundInfo();
+        updateGameStatus();
+        updateNextMoveMessage();
+      } else {
+        $('#player-setup-message-container')
+          .append('<div class="error-message">Error! Both player names must be provided.</div>');
+      
+        clearAllEarlierIntervalTimeouts();
 
-      addGameBoard();
-      addGameStatusContainer();
-      updateRoundInfo();
-      updateGameStatus();
-      updateNextMoveMessage();
+        setInterval(() => {
+          $('#player-setup-message-container').empty();
+        }, 3000);
+  
+      }
     });
   };
 
@@ -309,8 +387,10 @@ const displayControl = (() => {
   const updateGameStatus = () => {
     $(document).ready(function() {
       const playerDetails = GameFlow.getPlayers();
-      $('#p1-wins').text(`${playerDetails.p1.name} (${playerDetails.p1.sign}): ${playerDetails.p1.wins}`);
-      $('#p2-wins').text(`${playerDetails.p2.name} (${playerDetails.p2.sign}): ${playerDetails.p2.wins}`);
+      $('#p1-wins').empty();
+      $('#p2-wins').empty();
+      $('#p1-wins').append(`<div class="wins-data-item-left">${playerDetails.p1.name} ( ${playerDetails.p1.sign} )</div><div class="wins-data-item-right">: ${playerDetails.p1.wins}</div>`);
+      $('#p2-wins').append(`<div class="wins-data-item-left">${playerDetails.p2.name} ( ${playerDetails.p2.sign} )</div><div class="wins-data-item-right">: ${playerDetails.p2.wins}</div>`);
     });
   };
 
@@ -331,6 +411,9 @@ const displayControl = (() => {
 
       // Disable/remove onClick events from all game board cells.
       $('.gameboard-grid-item').removeAttr('onclick');
+
+      // Clear ealier message.
+      $('#game-messages').empty();
 
       // Show desired game message.
       $('#game-messages').append(message);
@@ -357,33 +440,33 @@ const displayControl = (() => {
         switch (result) {
           
           case 'round win':
-            message = `<p>Congrats ${currentPlayer.name}! You won the round!</p>`;
+            message = `<div>Congrats ${currentPlayer.name}! You won the round!</div>`;
             message += '<div>';
-            message += `<button id="next-round" onclick="displayControl.handleNextRoundOnClick()">Next round</button>`
+            message += `<button id="next-round" class="common-button" onclick="displayControl.handleNextRoundOnClick()">NEXT ROUND</button>`
             message += '</div>';
             displayGameMessage(message);
             break;
           
           case 'round draw':
-            message = '<p>Dou! The round was draw!</p>';
+            message = '<div>Dou! The round was draw!</div>';
             message += '<div>';
-            message += `<button id="next-round" onclick="displayControl.handleNextRoundOnClick()">Next round</button>`
+            message += `<button id="next-round" class="common-button" onclick="displayControl.handleNextRoundOnClick()">NEXT ROUND</button>`
             message += '</div>';
             displayGameMessage(message);
             break;
 
           case 'game win':
-            message = `<p>Awesome, ${currentPlayer.name}! You won the game!</p>`;
+            message = `<div>Awesome, ${currentPlayer.name}! You won the game!</div>`;
             displayGameMessage(message);
             break;
 
           case 'game loss':
-            message = `<p>Sorry ${currentPlayer.name}, you lost the game...!</p>`;
+            message = `<div>Sorry ${currentPlayer.name}, you lost the game...!</div>`;
             displayGameMessage(message);
             break;
 
           case 'game draw':
-            message = '<p>W00t?!? The game was draw! Unbelievable...!</p>';
+            message = '<div>W00t?!? The game was draw! Unbelievable...!</div>';
             displayGameMessage(message);
             break;
 
@@ -421,9 +504,9 @@ const displayControl = (() => {
       let statusContainer = '<div id="game-status-container">';
       statusContainer += '<div id="game-details">';
       statusContainer += '<div id="round-info"></div>';
-      statusContainer += '<div id="wins-info"><p>Wins:</>';
-      statusContainer += '<div id="p1-wins"></div>';
-      statusContainer += '<div id="p2-wins"></div>';
+      statusContainer += '<div id="wins-info">Round wins:</div>';
+      statusContainer += '<div id="p1-wins" class="wins-data-container"></div>';
+      statusContainer += '<div id="p2-wins" class="wins-data-container"></div>';
       statusContainer += '</div>';
       statusContainer += '</div>';
       statusContainer += '<div id="game-messages"></div>';
@@ -433,5 +516,11 @@ const displayControl = (() => {
     });
   };
 
-  return { addPlayerSetup, toggleGameSigns, handleStartGameOnClick, handleGameGridItemOnClick, handleNextRoundOnClick }
+  return {
+    addPlayerSetup,
+    handlePlayerTypeOnChange,
+    toggleGameSigns,
+    handleStartGameOnClick,
+    handleGameGridItemOnClick,
+    handleNextRoundOnClick }
 })();
