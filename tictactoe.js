@@ -24,19 +24,19 @@ const GameBoard = (() => {
   };
 
   // Function for checking did the player get three-in-row.
-  const isThreeInRow = (sign) => {
+  const isThreeInRow = (sign, board = _gameBoard) => {
     if (
       // Horizontal rows
-      (_gameBoard[0][0] === sign && _gameBoard[0][1] === sign && _gameBoard[0][2] === sign) ||
-      (_gameBoard[1][0] === sign && _gameBoard[1][1] === sign && _gameBoard[1][2] === sign) ||
-      (_gameBoard[2][0] === sign && _gameBoard[2][1] === sign && _gameBoard[2][2] === sign) ||
+      (board[0][0] === sign && board[0][1] === sign && board[0][2] === sign) ||
+      (board[1][0] === sign && board[1][1] === sign && board[1][2] === sign) ||
+      (board[2][0] === sign && board[2][1] === sign && board[2][2] === sign) ||
       // Vertical rows
-      (_gameBoard[0][0] === sign && _gameBoard[1][0] === sign && _gameBoard[2][0] === sign) ||
-      (_gameBoard[0][1] === sign && _gameBoard[1][1] === sign && _gameBoard[2][1] === sign) ||
-      (_gameBoard[0][2] === sign && _gameBoard[1][2] === sign && _gameBoard[2][2] === sign) ||
+      (board[0][0] === sign && board[1][0] === sign && board[2][0] === sign) ||
+      (board[0][1] === sign && board[1][1] === sign && board[2][1] === sign) ||
+      (board[0][2] === sign && board[1][2] === sign && board[2][2] === sign) ||
       // Corner to corner rows
-      (_gameBoard[0][0] === sign && _gameBoard[1][1] === sign && _gameBoard[2][2] === sign) ||
-      (_gameBoard[2][0] === sign && _gameBoard[1][1] === sign && _gameBoard[0][2] === sign)
+      (board[0][0] === sign && board[1][1] === sign && board[2][2] === sign) ||
+      (board[2][0] === sign && board[1][1] === sign && board[0][2] === sign)
     ) {
       return true;
     } 
@@ -57,12 +57,28 @@ const GameBoard = (() => {
     return true;
   };
 
+  // Function for returning all free/empty cells on the board.
+  const getEmptyCells = (board = _gameBoard) => {
+
+    const emptyCells = [];
+    for (let x = 0; x < 3; x++) {
+      for (let y = 0; y < 3; y++) {
+        if (board[x][y] === null) {
+          emptyCells.push({ x, y })
+        }
+      }
+    }
+
+    return emptyCells;
+  };
+
   return {
     resetGameBoard,
     getGameBoard,
     setChipOnGameBoard,
     isThreeInRow,
-    isBoardFull
+    isBoardFull,
+    getEmptyCells
   }
 })();
 
@@ -227,25 +243,100 @@ const GameFlow = (() => {
     }
   };
 
-  const getCoordinatesOfDummyAIMove = () => {
-    // Get current game board
-    const gameBoard = GameBoard.getGameBoard();
+  const getCoordinatesOfRandomMove = () => {
  
     // Identify free/empty cells on the board.
-    const emptyCells = [];
-    for (let x = 0; x < 3; x++) {
-      for (let y = 0; y < 3; y++) {
-        if (gameBoard[x][y] === null) {
-          emptyCells.push({ x, y })
-        }
-      }
-    }
-
+    const emptyCells = GameBoard.getEmptyCells()
+ 
     // Pick randomly one cell.
     const randomIndex = Math.floor(Math.random() * emptyCells.length); 
   
     // Return coordites of randomly picked cell.
     return emptyCells[randomIndex];
+  };
+
+  // Minimax algorithm for finding the best possible move for the AI player.
+  // The idea for this implementation was borrowed from the following
+  // web article/example: https://tinyurl.com/y94rchns. 
+  const minimax = (newBoard, sign) => {
+    
+    // Get list of empty cells.
+    const emptyCells = GameBoard.getEmptyCells(newBoard);
+
+    // Identify opponent's sign.
+    const opponentSign = _currentPlayer.sign === 'X' ? '0' : 'X';
+    
+    // Identify terminal states (win, lose, tie) and return corresponding value.
+    if (GameBoard.isThreeInRow(opponentSign, newBoard)) {
+      return { score: -10 };
+
+    } else if (GameBoard.isThreeInRow(_currentPlayer.sign, newBoard)) {
+      return { score: 10 };
+
+    } else if (emptyCells.length === 0) {
+      return { score: 0 };
+    }
+
+    // Array for collecting all the move object.
+    let moves = [];
+
+    // Loop through all available empty cells.
+    for (let i = 0; i < emptyCells.length; i++) {
+      
+      const x = emptyCells[i].x;
+      const y = emptyCells[i].y;
+      
+      // Object for storing the move details (index, score).
+      let move = {};
+      move.coordinates = {x, y};
+
+      // Set tested sign on the board.
+      newBoard[x][y] = sign;
+
+      // Collect the score of tested moves by calling the minimax recursively.
+      if (sign === _currentPlayer.sign) {
+        let result = minimax(newBoard, opponentSign);
+        move.score = result.score;
+
+      } else {
+        let result = minimax(newBoard, _currentPlayer.sign);
+        move.score = result.score;
+
+      }
+
+      // Reset the tested cell.
+      newBoard[x][y] = null;
+
+      // Store the tested move object.
+      moves.push(move);
+    }
+
+    let bestMove;
+
+    // If it is the current player's turn, loop over the moves and
+    // choose the move with highest score.
+    if (sign === _currentPlayer.sign) {
+      let bestScore = -10000;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score > bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+
+    // Otherwise, loop over the moves and select the move with the lowest score. 
+    } else {
+      let bestScore = 10000;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score < bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+
+    // Return the best move object.
+    return moves[bestMove];
   };
 
   return {
@@ -258,7 +349,8 @@ const GameFlow = (() => {
     getCurrentPlayer,
     getPlayers,
     makeMoveAndVerifyResult,
-    getCoordinatesOfDummyAIMove
+    getCoordinatesOfRandomMove,
+    minimax,
   }
 })();
 
@@ -457,8 +549,17 @@ const DisplayControl = (() => {
     $(document).ready(function() {
       // Trigger automated next move if the current player is computer.
       if (currentPlayer.type === 'computer') {
-        const coordinates = GameFlow.getCoordinatesOfDummyAIMove();
-
+        
+        let coordinates = undefined;
+        
+        // Randomize the first move of computer player.
+        if ((GameBoard.getEmptyCells()).length === 9) {
+          coordinates = GameFlow.getCoordinatesOfRandomMove();
+          
+        } else {
+          coordinates = GameFlow.minimax(GameBoard.getGameBoard(), currentPlayer.sign).coordinates;
+        }
+ 
         // Having a short delay when dealing computer moves gives
         // an illusion that the AI is 'thinking' her move. This is also
         // nicer for human eyes when you are able to observe what
