@@ -6,11 +6,7 @@ The application is an project assignment relating to The Odin Project, Full Stac
 
 ## Installation
 
-To be updated
-
-## Usage
-
-To be updated
+Copy / clone the project files on your local computer and open the index.html with browser.
 
 ## License
 
